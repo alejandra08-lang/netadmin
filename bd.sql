@@ -128,7 +128,7 @@ create table credenciales (
     cre_intentos_fallidos INT,
     cre_ultimo_login TIMESTAMP,
     cre_tiempo_bloqueo TIMESTAMP,
-    usu_contraseña VARCHAR(225),
+    usu_contrasena VARCHAR(225),
     ID_usuario INT REFERENCES usuario(ID_usuario) ON DELETE RESTRICT not null
 );
 
@@ -193,4 +193,10 @@ create table switch (
     CONSTRAINT fk_switch
         FOREIGN KEY (ID_hoja_de_vida) REFERENCES hoja_de_vida (ID_hoja_de_vida) 
         ON DELETE RESTRICT
+);
+
+CREATE TABLE tipo_accion (
+    id_tipo_accion SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    descripcion TEXT
 );

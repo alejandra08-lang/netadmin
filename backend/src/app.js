@@ -1,13 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-const db = require('./config/db.js');
-
 const app = express();
 
 // Middlewares
 app.use(cors());
 app.use(express.json()); // Para que el servidor entienda JSON
+
+app.use('/rol', require('./routes/routesRole'));
+app.use('/usuarios', require('./routes/routesUsuario'));
+app.use('/credenciales', require('./routes/routesCredenciales'));
+app.use('/auth', require('./routes/routesAuth'));
+app.use('/historial', require ('./routes/routesHistorialsistema'));
+app.use('/site', require('./routes/routeSite'));
+app.set('trust proxy', true);
+
+
 
 // Ruta de prueba
 app.get('/', (req, res) => {

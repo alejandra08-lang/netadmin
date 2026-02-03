@@ -1,0 +1,4 @@
+module.exports = {
+    MAX_INTENTOS: 3,
+    MINUTOS_BLOQUEO: 15
+}

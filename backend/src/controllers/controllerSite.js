@@ -13,16 +13,16 @@ const obtener_todos_site = async (req, res) => {
 };
 
 const crear_site = async (req, res) => {
-    const { sit_nombre, ID_ubicacion} = req.body;
+    const { sit_nombre, id_ubicacion} = req.body;
 
-    if(!sit_nombre || !ID_ubicacion){
+    if(!sit_nombre || !id_ubicacion){
         return res.status(400).json({
             message: "Faltan datos obligatorios: Nombre o ubicacion"
         });
     }
     try{
-        const nuevoSite = await site.crear_site(sit_nombre, ID_ubicacion);
-        res.Status(201).json({
+        const nuevoSite = await site.crear_site(sit_nombre, id_ubicacion);
+        res.status(201).json({
             message: "Sitio creado correctamente",
             data: nuevoSite
         });
@@ -35,7 +35,7 @@ const crear_site = async (req, res) => {
             });
         }
         res.status(500).json({
-            message: "Error al creaar el site",
+            message: "Error al crear el site",
             error: error.message
         });
     }
@@ -44,7 +44,7 @@ const crear_site = async (req, res) => {
 const eliminar_site = async (req, res ) => {
     const {id} = req.params;
     try {
-        const eliminar_site = await  site.delete(id);
+        const eliminar_site = await  site.eliminar_site(id);
 
         if(!eliminar_site) {
             return res.status(404).json({message: "La site no existe."});
@@ -64,4 +64,5 @@ const eliminar_site = async (req, res ) => {
 module.exports = {
     obtener_todos_site,
     crear_site,
-    eliminar_site};
+    eliminar_site
+};

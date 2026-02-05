@@ -2,7 +2,7 @@ const Departamento = require('../models/modelDepartamento');
 
 const obtener_departamentos = async (req, res) => {
     try {
-        const departamentos = await Departamento.getAll();
+        const departamentos = await Departamento.obtener_departamentos();
         res.status(200).json(departamentos);
     }catch (error) {
         res.status(500).json({
@@ -13,5 +13,5 @@ const obtener_departamentos = async (req, res) => {
 };
 
 module.exports = {
-    obtener_departamentos,
+    obtener_departamentos
 }

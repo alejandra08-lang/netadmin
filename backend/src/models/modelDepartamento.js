@@ -1,8 +1,8 @@
-const db = require('../confing/db');
+const db = require('../config/db');
 
 const Departamento = {
-    getAll: async () => {
-        const query ='SELECT * FROM departamentos ORDER BY dep_nombre ASC';
+    obtener_departamentos: async () => {
+        const query ='SELECT * FROM departamento ORDER BY dep_nombre ASC';
         const {rows} = await db.query(query);
         return rows;
     },
@@ -10,7 +10,7 @@ const Departamento = {
     getById: async (id) => {
         const query = `
         SELECT d.dep_nombre, c.ciu_nombre
-        FROM departamentos d
+        FROM departamento d
         LEFT JOIN ciudad c ON d.ID_departamento = c.ID_departamento
         WHERE d.ID_departamento = &1
 

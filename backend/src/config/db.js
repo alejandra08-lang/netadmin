@@ -1,5 +1,8 @@
 const { Pool } = require('pg');
+const path = require('path');
 require('dotenv').config();
+
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 console.log("Intentando conectar con usuario:", process.env.DB_USER);
 
@@ -9,7 +12,7 @@ const pool = new Pool({
     user: process.env.DB_USER || 'postgres',
     host: process.env.DB_HOST || 'localhost', 
     database: process.env.DB_DATABASE || 'Netadmin',
-    password: process.env.DB_PASSWORD || '1947',
+    password: process.env.DB_PASSWORD || '123456',
     port: process.env.DB_PORT || 5432,
 });
 

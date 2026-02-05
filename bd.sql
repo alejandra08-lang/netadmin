@@ -1,10 +1,10 @@
--- Active: 1769276078135@@127.0.0.1@5432@Netadmin
+-- Active: 1769202202005@@127.0.0.1@5432@Netadmin
 
 create type tipo_via AS enum ('Avenida', 'Calle', 'Callera', 'Transversal', 'Diagonal');
 CREATE type activo_hoja AS ENUM ('Activo', 'Baja', 'Garantia');
 CREATE type disponibilidad_equipo AS ENUM ('Disponibilidad', 'Asignado', 'En mantenimiento');
 create type impacto as enum ('Critico', 'Alto', 'Medio', 'Bajo');
-create type tipo_equipo AS enum ('Firewall', 'Switch', 'Punto de acceso');
+create type tipo_equipo AS enum ('Firewall', 'Switch', 'Punto de acceso', 'Servidor');
 create type en_linea As enum('Online', 'offline');
 create type estructura AS enum('Gabinete', 'Rack');
 create type estado_token as Enum('Activo', 'Utilizado', 'No utilizado');
@@ -24,8 +24,8 @@ create table ciudad (
 
 create table ubicacion (
     ID_ubicacion SERIAL primary key,
-    ubi_localidad_municipio varchar not null,
-	ubi_barrio varchar(50) not null,
+    ubi_ubi_localidad_municipio_municipio varchar not null,
+	ubi_ubi_barrio varchar(50) not null,
 	ubi_tipo_via tipo_via not null,
 	ubi_numero varchar(50),
     ID_ciudad INT references ciudad(ID_ciudad) ON DELETE restrict
@@ -126,8 +126,8 @@ create table rest_token(
 create table credenciales (
     ID_credenciales serial PRIMARY KEY,
     cre_intentos_fallidos INT,
-    cre_ultimo_login TIMESTAMP,
-    cre_tiempo_bloqueo TIMESTAMP,
+    cre_ultimo_login TIMESTAMP with time zone DEFAULT current_timestamp,
+    cre_tiempo_bloqueo TIMESTAMP with time zone DEFAULT current_timestamp,
     usu_contraseña VARCHAR(225),
     ID_usuario INT REFERENCES usuario(ID_usuario) ON DELETE RESTRICT not null
 );
@@ -148,7 +148,7 @@ create table equipos(
 
 
 create table hoja_de_vida (
-    ID_hoja_de_vida SERIAL PRIMARY KEY,
+    id_hoja_de_vida SERIAL PRIMARY KEY,
     hdv_creador int,
     hdv_activo activo_hoja not null,
     hdv_disponibilidad disponibilidad_equipo not null,
@@ -167,7 +167,7 @@ create table manteniemiento (
     mto_responsable varchar(50) not null,
     mto_descripcion text not null,
     mto_fecha TIMESTAMP,
-    ID_hoja_de_vida INT REFERENCES hoja_de_vida (ID_hoja_de_vida) ON DELETE RESTRICT
+    id_hoja_de_vida INT REFERENCES hoja_de_vida (id_hoja_de_vida) ON DELETE RESTRICT
 )
 
 CREATE TABLE historial_sistema (
@@ -189,8 +189,8 @@ create table switch (
     swt_direccion_IP VARCHAR(100) not null,
     swt_hostname VARCHAR(50) not null,
     swt_modelo VARCHAR(50),
-    ID_hoja_de_vida INT not null,
+    id_hoja_de_vida INT not null,
     CONSTRAINT fk_switch
-        FOREIGN KEY (ID_hoja_de_vida) REFERENCES hoja_de_vida (ID_hoja_de_vida) 
+        FOREIGN KEY (id_hoja_de_vida) REFERENCES hoja_de_vida (id_hoja_de_vida) 
         ON DELETE RESTRICT
 );

@@ -1,8 +1,16 @@
+<<<<<<< HEAD
+=======
+-- Active: 1769202202005@@127.0.0.1@5432@netadmin2
+>>>>>>> origin/alejandra
 --
 -- PostgreSQL database dump
 --
 
+<<<<<<< HEAD
 \restrict dFH66fJHkrGYhoIKP8Sv2cbM146Rei1IT71bJgWeeMyNjavwhXMb87mhSzLiiMV
+=======
+
+>>>>>>> origin/alejandra
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -886,8 +894,13 @@ ALTER SEQUENCE public.switch_id_switch_seq OWNED BY public.switch.id_switch;
 
 CREATE TABLE public.ubicacion (
     id_ubicacion integer NOT NULL,
+<<<<<<< HEAD
     ubi_localidad_municipio character varying NOT NULL,
     ubi_barrio character varying(50) NOT NULL,
+=======
+    ubi_ubi_localidad_municipio_municipio character varying NOT NULL,
+    ubi_ubi_barrio character varying(50) NOT NULL,
+>>>>>>> origin/alejandra
     ubi_tipo_via public.tipo_via CONSTRAINT ubicacion_ubi_calle_not_null NOT NULL,
     ubi_numero character varying(50),
     id_ciudad integer
@@ -1116,7 +1129,11 @@ ALTER TABLE ONLY public.usuario ALTER COLUMN id_usuario SET DEFAULT nextval('pub
 --
 
 COPY public.campana (id_campana, cam_nombre_campana, id_site) FROM stdin;
+<<<<<<< HEAD
 1	campaña 2	1
+=======
+1	campaña 2	
+>>>>>>> origin/alejandra
 2	claro	2
 \.
 
@@ -1461,7 +1478,11 @@ COPY public.switch (id_switch, swt_direccion_ip, swt_hostname, swt_modelo, id_ho
 -- Data for Name: ubicacion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+<<<<<<< HEAD
 COPY public.ubicacion (id_ubicacion, ubi_localidad_municipio, ubi_barrio, ubi_tipo_via, ubi_numero, id_ciudad) FROM stdin;
+=======
+COPY public.ubicacion (id_ubicacion, ubi_ubi_localidad_municipio_municipio, ubi_ubi_barrio, ubi_tipo_via, ubi_numero, id_ciudad) FROM stdin;
+>>>>>>> origin/alejandra
 1	Bose	La libertad	Calle	9	56
 2	Comuna 13	luis miguel	Calle	9	3
 \.

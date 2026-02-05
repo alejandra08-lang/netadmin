@@ -5,16 +5,16 @@ module.exports = (rolesPermitidos = []) => {
         console.log('USUARIO:', req.usuario);
         console.log('ROLES PERMITIDOS:', rolesPermitidos);
 
-        if(!req.usuario || req.usuario.rol === undefined){
+        if(!req.usuario || req.usuario.id_rol === undefined){
             console.log('No viene id_rol');
             return res.status(403).json({
                 message: 'Rol no encontrado en el token'
             });
         }
 
-        const rolUsuario = Number(req.usuario.rol);
+        const rolUsuario = Number(req.usuario.id_rol);
 
-        console.log('ROL USUARIO (ID):', req.usuario.rol);
+        console.log('ROL USUARIO (ID):', req.usuario.id_rol);
 
         if (!rolesPermitidos.includes(rolUsuario)) {
             console.log('rol no permitido')

@@ -2,7 +2,7 @@ const db = require('../config/db');
 const { getAll } = require('./modelDepartamento');
 
 const Ciudad = {
-    getAll: async () => {
+    obtener_ciudades: async () => {
         const query = `
         SELECT c.ID_ciudad, c.ciu_nombre, d.dep_nombre
         FROM ciudad c

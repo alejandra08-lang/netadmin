@@ -1,5 +1,8 @@
 const { Pool } = require('pg');
+const path = require('path');
 require('dotenv').config();
+
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 console.log("Intentando conectar con usuario:", process.env.DB_USER);
 

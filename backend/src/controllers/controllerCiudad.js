@@ -2,7 +2,7 @@ const Ciudad = require('../models/modelCiudad');
 
 const obtener_ciudades = async (req, res) => {
     try {
-        const ciudades = await Ciudad.getAll();
+        const ciudades = await Ciudad.obtener_ciudades();
         res.status(200).json(ciudades);
     } catch (error) {
         res.status(500).json({

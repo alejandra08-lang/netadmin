@@ -35,7 +35,7 @@ const crear_site = async (req, res) => {
             });
         }
         res.status(500).json({
-            message: "Error al creaar el site",
+            message: "Error al crear el site",
             error: error.message
         });
     }
@@ -64,4 +64,5 @@ const eliminar_site = async (req, res ) => {
 module.exports = {
     obtener_todos_site,
     crear_site,
-    eliminar_site};
+    eliminar_site
+};

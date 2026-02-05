@@ -11,8 +11,10 @@ module.exports = async (req, res, next) => {
             return res.status(401).json({ message: 'Formato de token inválido' });
         }
 
-        const token = parts[1];
+        const token = req.headers.authorization?.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.usuario = decoded;
+        next();
 
         // Traer usuario completo con rol
         const { rows } = await pool.query(`
@@ -26,9 +28,9 @@ module.exports = async (req, res, next) => {
 
         // Ahora req.usuario tiene id_usuario, usu_nombre, id_rol y rol (nombre)
         req.usuario = {
-            id_usuario: rows[0].id_usuario,
-            usu_nombre: rows[0].usu_nombre,
-            id_rol: rows[0].id_rol
+            id_usuario: decoded.id_usuario,
+            usu_nombre: decoded.usu_nombre,
+            id_rol: decoded.rol
         };
         next();
 
@@ -37,3 +39,4 @@ module.exports = async (req, res, next) => {
         return res.status(401).json({ message: 'Token inválido o expirado' });
     }
 };
+///FALTA VERIFICAR ACCIONES EN PROVEEDORES

@@ -1,22 +1,20 @@
-const ROLES= require('../config/roles');
+const ROLES = require('../config/roles');
 module.exports = (rolesPermitidos = []) => {
     return (req, res, next) => {
         console.log('================ ROL MIDDLEWARE ================');
         console.log('USUARIO:', req.usuario);
         console.log('ROLES PERMITIDOS:', rolesPermitidos);
-        
-        console.log('ROL USUARIO', req.usuario);
 
-        if(!req.usuario || req.usuario.id_rol === undefined){
+        if(!req.usuario || req.usuario.rol === undefined){
             console.log('No viene id_rol');
             return res.status(403).json({
                 message: 'Rol no encontrado en el token'
             });
         }
 
-        const rolUsuario = Number(req.usuario.id_rol);
+        const rolUsuario = Number(req.usuario.rol);
 
-        console.log('ROL USUARIO (ID):', rolUsuario);
+        console.log('ROL USUARIO (ID):', req.usuario.rol);
 
         if (!rolesPermitidos.includes(rolUsuario)) {
             console.log('rol no permitido')

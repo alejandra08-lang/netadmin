@@ -14,7 +14,7 @@ router.post('/', auth, rol([ROLES.Administrador]), usuarioController.createUsuar
 // Obtener usuario por ID
 router.get('/:id', auth, rol([ROLES.Administrador]), usuarioController.getUsuarioById);
 
-// Actualizar usuario por ID
+// Actualizar usuario por nombre
 router.put('/:id', auth, rol([ROLES.Administrador]), usuarioController.updateUsuario);
 
 //Cambiar contraseña a otros usuarios

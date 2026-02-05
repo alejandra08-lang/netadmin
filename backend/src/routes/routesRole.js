@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/controllerRol');
 
-
 //crear rol
 router.post('/', controller.createRol);
 

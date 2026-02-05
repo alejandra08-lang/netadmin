@@ -5,7 +5,7 @@ const pool = require ('../config/db');
 const Auth = require('../models/modelAuth');
 const {MAX_INTENTOS, MINUTOS_BLOQUEO} = require ('../config/constans');
 const HistorialSistema = require('../models/modelHistorialsistema');
-const Tipos_accion = require('../config/Tiposaccion');
+const TiposAccion = require('../config/Tiposaccion');
 const Credencialesmodel = require('../models/modelCredenciales');
 
     console.log('JWT_SECRET:', process.env.JWT_SECRET);
@@ -62,12 +62,15 @@ exports.login = async (req, res) => {
 
     //comparar contraseña
 
+    console.log('--- DEPURACIÓN DE LOGIN ---');
+    console.log('Valor de usu_contrasena (Postman):', usu_contrasena);
+    console.log('Objeto credenciales completo:', credenciales);
+    console.log('---------------------------');
+
     const match = await bcrypt.compare(
         usu_contrasena,
         credenciales.usu_contrasena
     );
-
-
     // CONTRASEÑA INCORRECTA
     if (!match) {
         const nuevosIntentos = credenciales.cre_intentos_fallidos + 1;
@@ -101,8 +104,7 @@ exports.login = async (req, res) => {
             id_usuario: usuario.id_usuario,
             his_accion: 'Intento fallido de inicio de sesión',
             id_tipo_accion: TiposAccion.LOGIN_FALLIDO,
-            id_campana: usuario.id_campana,
-            his_ip: ip
+            id_campana: usuario.id_campanax
         });
 
         return res.status(401).json({ message: 'Contraseña incorrecta' });
@@ -115,7 +117,8 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
         {
             id_usuario: usuario.id_usuario,
-            rol: usuario.id_rol
+            rol: usuario.id_rol,
+            id_campana: usuario.id_campana
         },
 
         process.env.JWT_SECRET,
@@ -127,7 +130,7 @@ exports.login = async (req, res) => {
     await HistorialSistema.create({
         id_usuario: usuario.id_usuario,
         his_accion: `Ha iniciado sesion el usuario ${usuario.usu_nombre}`,
-        id_tipo_accion: Tipos_accion.INICIO_SESION,
+        id_tipo_accion: TiposAccion.INICIO_SESION,
         id_campana: usuario.id_campana,
         his_ip: ip
     });
@@ -149,6 +152,10 @@ exports.login = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(error); // Esto imprimirá el error real en tu terminal de VS Code
+        res.status(500).json({ 
+            message: error.message,
+            stack: error.stack // Esto te dirá la línea exacta donde muere el código
+        });
     }
 };

@@ -7,15 +7,15 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Para que el servidor entienda JSON
 
-app.use('/rol', require('./routes/routesRole'));
-app.use('/usuarios', require('./routes/routesUsuario'));
-app.use('/credenciales', require('./routes/routesCredenciales'));
-app.use('/auth', require('./routes/routesAuth'));
-app.use('/historial', require ('./routes/routesHistorialsistema'));
-app.use('/site', require('./routes/routeSite'));
+app.use('/rol', require('./routes/routesRole')); 
+app.use('/usuarios', require('./routes/routesUsuario')); 
+app.use('/credenciales', require('./routes/routesCredenciales')); 
+app.use('/auth', require('./routes/routesAuth')); 
+app.use('/historial', require ('./routes/routesHistorialsistema')); 
+app.use('/site', require('./routes/routeSite')); 
+app.use('/instalador_responsable', require('./routes/routesInstaladorresponsabel')); //ya
+app.use('/proveedor', require('./routes/routesProveedor'));
 app.set('trust proxy', true);
-
-
 
 // Ruta de prueba
 app.get('/', (req, res) => {

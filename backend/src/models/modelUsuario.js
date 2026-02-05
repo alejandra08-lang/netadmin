@@ -1,5 +1,5 @@
 const pool = require('../config/db.js');
-
+const Tiposaccion = require('../config/Tiposaccion.js');
 
 const Usuariomodel= {
     async create(data) {
@@ -47,46 +47,53 @@ const Usuariomodel= {
         return rows;
     },
 
-    async findById(id){
-        const query =  `
-            SELECT * FROM usuario  where id_usuario = $1;
-        `;
-        const {rows } = await pool.query(query, [id]);
-        return rows[0];
-    },
+    async update(id_usuario, data) {
 
-    async update(id, data){
-        const {
-            usu_nombre,
-            usu_apellido,
-            usu_correo, 
-            usu_telefono, 
-            id_rol,
-            id_campana
-        } = data;
+        const campos = [];
+        const valores = [];
+        let index = 1;
 
-        const query =  ` 
+        if (data.usu_nombre !== undefined) {
+            campos.push(`usu_nombre = $${index++}`);
+            valores.push(data.usu_nombre);
+        }
+
+        if (data.usu_apellido !== undefined) {
+            campos.push(`usu_apellido = $${index++}`);
+            valores.push(data.usu_apellido);
+        }
+
+        if (data.usu_correo !== undefined) {
+            campos.push(`usu_correo = $${index++}`);
+            valores.push(data.usu_correo);
+        }
+
+        if (data.usu_telefono !== undefined) {
+            campos.push(`usu_telefono = $${index++}`);
+            valores.push(data.usu_telefono);
+        }
+
+        if (data.id_rol !== undefined) {
+            campos.push(`id_rol = $${index++}`);
+            valores.push(data.id_rol);
+        }
+
+        if (data.id_campana !== undefined) {
+            campos.push(`id_campana = $${index++}`);
+            valores.push(data.id_campana);
+        }
+
+        if (campos.length === 0) return null;
+
+        const query = `
             UPDATE usuario
-            SET usu_nombre = $1,
-                usu_apellido = $2,
-                usu_correo = $3,
-                usu_telefono = $4,
-                id_rol = $5,
-                id_campana =$6
-            WHERE id_usuario = $7
+            SET ${campos.join(', ')}
+            WHERE id_usuario = $${index}
             RETURNING *;
         `;
 
-        const {rows} = await pool.query(query, [
-            usu_nombre,
-            usu_apellido,
-            usu_correo, 
-            usu_telefono,
-            id_rol,
-            id_campana,
-            id_usuario
-        ]);
-
+        valores.push(id_usuario);
+        const { rows } = await pool.query(query, valores);
         return rows[0];
     },
 

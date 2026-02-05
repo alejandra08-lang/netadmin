@@ -69,8 +69,11 @@ const Credencialesmodel = {
                 cre_tiempo_bloqueo = NULL,
                 cre_ultima_ip = $2
             WHERE id_usuario = $1
+            RETURNING *;
         `;
-        await pool.query(query, [id_usuario, ip]);
+
+        const {rows} = await pool.query(query, [id_usuario, ip]);
+        return rows[0];
     },
 
     async updateIntentosfallidos(id_usuario){

@@ -1,18 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middlewares/authMiddleware');
+const rol = require('../middlewares/rolMiddleware')
 const controller = require('../controllers/controllerRol');
+const ROLES = require('../config/roles');
 
 //crear rol
-router.post('/', controller.createRol);
+router.post('/', auth, rol([ROLES.Administrador]), controller.createRol);
 
 //optener rol
-router.get('/', controller.getRoles);
-router.get('/',controller.getRolbyId);
+router.get('/', auth, rol([ROLES.Administrador]), controller.getRoles);
+router.get('/', auth, rol([ROLES.Administrador]), controller.getRolbyId);
 
 //actualizar
-router.put('/', controller.updateRol);
+router.put('/', auth, rol([ROLES.Administrador]), controller.updateRol);
 
 //eliminar
-router.delete('/',controller.deleteRol);
+router.delete('/', auth, rol([ROLES.Administrador]), controller.deleteRol);
 
 module.exports = router;

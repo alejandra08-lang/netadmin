@@ -9,7 +9,7 @@ const ROLES = require('../config/roles');
 router.post('/', auth, rol([ROLES.Administrador, ROLES.Gestor]), Instaladorresponsable.create); //listo
 
 //listar los instaladores
-router.get('/', auth, rol([ROLES.Administrador, ROLES.Gestor]), Instaladorresponsable.getInstaladores);
+router.get('/', auth, rol([ROLES.Administrador, ROLES.Gestor]), Instaladorresponsable.getAllInstalador );
 
 //buscar instalador por nombre
 router.get('/:inr_nombre', auth, rol([ROLES.Administrador, ROLES.Gestor]), Instaladorresponsable.getinstaladorByname);

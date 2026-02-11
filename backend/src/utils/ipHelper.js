@@ -1,0 +1,9 @@
+const obtenerIp = (req) => {
+    return (
+        req.headers['x-forwarded-for']?.split(',')[0] ||
+        req.socket.remoteAddress ||
+        null
+    );
+};
+
+module.exports = obtenerIp;

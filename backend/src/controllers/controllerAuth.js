@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const getUsuarioIp = require('../utils/getUsuarioIp');
-const pool = require ('../config/db');
+const db = require ('../config/db');
 const Auth = require('../models/modelAuth');
 const {MAX_INTENTOS, MINUTOS_BLOQUEO} = require ('../config/constans');
 const HistorialSistema = require('../models/modelHistorialsistema');
+const registrarHistorial = require('../utils/historialHelper');
 const TiposAccion = require('../config/Tiposaccion');
 const Credencialesmodel = require('../models/modelCredenciales');
+const getClientIp = require('../utils/ipHelper');
+
 
     console.log('JWT_SECRET:', process.env.JWT_SECRET);
     console.log('JWT_EXPIRES_IN:', process.env.JWT_EXPIRES_IN);
@@ -34,7 +36,7 @@ exports.login = async (req, res) => {
             WHERE u.usu_correo = $1
         `;
 
-    const { rows } = await pool.query(userQuery, [usu_correo]);
+    const { rows } = await db.query(userQuery, [usu_correo]);
 
     if (rows.length === 0) {
         return res.status(401).json({ message: 'Credenciales incorrectas' });
@@ -104,7 +106,7 @@ exports.login = async (req, res) => {
             id_usuario: usuario.id_usuario,
             his_accion: 'Intento fallido de inicio de sesión',
             id_tipo_accion: TiposAccion.LOGIN_FALLIDO,
-            id_campana: usuario.id_campanax
+            id_campana: usuario.id_campana
         });
 
         return res.status(401).json({ message: 'Contraseña incorrecta' });
@@ -127,11 +129,11 @@ exports.login = async (req, res) => {
         }
     );
 
-    await HistorialSistema.create({
+    await registrarHistorial({
         id_usuario: usuario.id_usuario,
-        his_accion: `Ha iniciado sesion el usuario ${usuario.usu_nombre}`,
-        id_tipo_accion: TiposAccion.INICIO_SESION,
-        id_campana: usuario.id_campana,
+        id_campana: usuario.id_campana ,
+        accion: `Ha iniciado sesion el usuario ${usuario.usu_nombre}`,
+        tipoAccion: TiposAccion.INICIO_SESION,
         his_ip: ip
     });
 
@@ -152,10 +154,10 @@ exports.login = async (req, res) => {
 
 
     } catch (error) {
-        console.error(error); // Esto imprimirá el error real en tu terminal de VS Code
+        console.error(error); 
         res.status(500).json({ 
             message: error.message,
-            stack: error.stack // Esto te dirá la línea exacta donde muere el código
+            stack: error.stack
         });
     }
 };

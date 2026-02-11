@@ -1,4 +1,4 @@
-const pool = require('../config/db.js');
+const db = require('../config/db.js');
 const Tiposaccion = require('../config/Tiposaccion.js');
 
 const Usuariomodel= {
@@ -19,7 +19,7 @@ const Usuariomodel= {
             RETURNING *;
         `;
 
-        const { rows} = await pool.query(query, [
+        const { rows} = await db.query(query, [
             usu_nombre,
             usu_apellido,
             usu_correo, 
@@ -43,7 +43,7 @@ const Usuariomodel= {
             from usuario u
             INNER JOIN rol r ON u.id_rol = r.id_rol;
         `;
-        const {rows} = await pool.query(query);
+        const {rows} = await db.query(query);
         return rows;
     },
 
@@ -93,12 +93,12 @@ const Usuariomodel= {
         `;
 
         valores.push(id_usuario);
-        const { rows } = await pool.query(query, valores);
+        const { rows } = await db.query(query, valores);
         return rows[0];
     },
 
     async updatePassword(id_usuario, password) {
-        const { rows } = await pool.query(
+        const { rows } = await db.query(
             `
             UPDATE credenciales
             SET usu_contrasena = $1
@@ -110,7 +110,7 @@ const Usuariomodel= {
     },
 
     async delete(id){
-        await pool.query(
+        await db.query(
             'DELETE from usuario WHERE id_usuario = $1',
             [id]
         );

@@ -13,7 +13,7 @@ const CaracteristicasTecnicas = {
         return rows;
     },
 
-    crear_caracteristicas: async (datos) => {
+    crear_caracteristicas: async (data) => {
         const {
             crt_procesador, 
             crt_memoria_nvra, 
@@ -22,7 +22,7 @@ const CaracteristicasTecnicas = {
             crt_respaldo, 
             crt_funciones, 
             id_dependencia_impacto
-        } = datos;
+        } = data;
 
         const query = `
         INSERT INTO caracteristicas_tecnicas (
@@ -65,23 +65,28 @@ const CaracteristicasTecnicas = {
 
         const query = `
         UPDATE caracteristicas_tecnicas
-        SET crt_procesador = $1, crt_memoria_nvra = $2, crt_version_firmware = $3,
-        crt_sistema_operativo = $4, crt_respaldo = $5, crt_funciones = $6,
-        Id_dependencia_impacto = $7
-        WHERE ID_caracteristicas_tecnicas = $8
+        SET 
+            crt_procesador = COALESCE($1, crt_procesador),
+            crt_memoria_nvra = COALESCE($2, crt_memoria_nvra),
+            crt_version_firmware = COALESCE($3, crt_version_firmware),
+            crt_sistema_operativo = COALESCE($4, crt_sistema_operativo),
+            crt_respaldo = COALESCE($5, crt_respaldo),
+            crt_funciones = COALESCE($6, crt_funciones),
+            id_dependencia_impacto = COALESCE($7, id_dependencia_impacto)
+        WHERE id_caracteristicas_tecnicas = $8
         RETURNING *
         `;
 
         const values = [
-            crt_procesador, 
-            crt_memoria_nvra, 
-            crt_version_firmware,
-            crt_sistema_operativo, 
-            crt_respaldo, 
-            crt_funciones, 
-            id_dependencia_impacto, id
+            crt_procesador ?? null,
+            crt_memoria_nvra ?? null,
+            crt_version_firmware ?? null,
+            crt_sistema_operativo ?? null,
+            crt_respaldo ?? null,
+            crt_funciones ?? null,
+            id_dependencia_impacto ?? null,
+            id
         ];
-
         const { rows } = await db.query(query, values);
         return rows[0];
     },

@@ -1,5 +1,4 @@
-const pool = require('../config/db.js');
-const { findAll, update } = require('./modelUsuario.js');
+const db = require('../config/db.js');
 
 const Proveedormodel = {
     //crear proveedor
@@ -30,7 +29,7 @@ const Proveedormodel = {
             RETURNING *;    
         `;
 
-        const {rows} = await pool.query(query, [
+        const {rows} = await db.query(query, [
             pro_nombre,
             pro_razon_social,
             pro_telefono_1,
@@ -50,7 +49,7 @@ const Proveedormodel = {
             SELECT * from proveedor
         `;
 
-        const {rows} = await pool.query(query);
+        const {rows} = await db.query(query);
         return rows;
     },
 
@@ -62,9 +61,13 @@ const Proveedormodel = {
             proveedor 
             where LOWER(pro_razon_social) = LOWER($1);
         `;
-        const { rows } = await pool.query(query, [pro_razon_social]);
+        const { rows } = await db.query(query, [pro_razon_social]);
         return rows;
     },
+
+    //paginacion
+    //+++++++++++++++++++++++++
+    //////////+++
 
     //actualizar proveedor
 
@@ -114,7 +117,7 @@ const Proveedormodel = {
         `;
 
         valores.push(id_proveedor);
-        const { rows } = await pool.query(query, valores);
+        const { rows } = await db.query(query, valores);
         return rows[0];
     },
 
@@ -125,7 +128,7 @@ const Proveedormodel = {
             RETURNING *; 
         `;
 
-        const { rows } = await pool.query(query, [id]);
+        const { rows } = await db.query(query, [id]);
         return rows[0];
     }
 };

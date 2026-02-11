@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const db = require('../config/db');
 
 const Credencialesmodel = {
     async create(data){
@@ -14,7 +14,7 @@ const Credencialesmodel = {
                 RETURNING *;
         `;
 
-        const { rows } = await pool.query(query, [
+        const { rows } = await db.query(query, [
             usu_contrasena,
             id_usuario
         ]);
@@ -33,12 +33,12 @@ const Credencialesmodel = {
             FROM credenciales c
             INNER JOIN usuario u ON c.id_usuario = u.id_usuario;
         `;
-        const {rows} = await pool.query(query);
+        const {rows} = await db.query(query);
         return rows;
     },
 
     async findById(id) {
-        const {rows} = await pool.query(
+        const {rows} = await db.query(
             'SELECT * FROM credenciales WHERE id_credenciales = $1',
             [id]
         );
@@ -53,7 +53,7 @@ const Credencialesmodel = {
             WHERE id_usuario = $2
             RETURNING *;
         `;
-        const {rows } = await pool.query(query, [
+        const {rows } = await db.query(query, [
             nuevacontrasena,
             id_usuario
         ]);
@@ -72,12 +72,12 @@ const Credencialesmodel = {
             RETURNING *;
         `;
 
-        const {rows} = await pool.query(query, [id_usuario, ip]);
+        const {rows} = await db.query(query, [id_usuario, ip]);
         return rows[0];
     },
 
     async updateIntentosfallidos(id_usuario){
-        const {rows} = await pool.query( `
+        const {rows} = await db.query( `
             UPDATE credenciales
             SET cre_intentos_fallidos = cre_intentos_fallidos + 1
             WHERE id_usuario = $1
@@ -85,7 +85,7 @@ const Credencialesmodel = {
         `, [id_usuario]);
 
         if (rows[0].cre_intentos_fallidos >= 5) {
-            await pool.query(`
+            await db.query(`
                 UPDATE credenciales
                 SET cre_tiempo_bloqueo = now() + interval '15 minutes'
                 WHERE id_usuario = $1
@@ -94,7 +94,7 @@ const Credencialesmodel = {
     },
 
     async delete(id){
-        await pool.query(
+        await db.query(
             'DELETE from credenciales WHERE id_credenciales = $1',
             [id]
         );

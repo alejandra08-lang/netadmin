@@ -20,7 +20,8 @@ const Mantenimiento = {
             mto_fecha, 
             id_hoja_de_vida, 
             id_usuario, 
-            mto_responsable
+            mto_responsable,
+            mto_estado
         } = datos;
 
         const query = `
@@ -30,9 +31,10 @@ const Mantenimiento = {
         mto_fecha,
         id_hoja_de_vida,
         id_usuario,
-        mto_responsable
+        mto_responsable,
+        mto_estado
         ) 
-        VALUES ($1, $2, $3, $4, $5, $6)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
         `;
 
@@ -42,7 +44,9 @@ const Mantenimiento = {
             mto_fecha, 
             id_hoja_de_vida, 
             id_usuario, 
-            mto_responsable];
+            mto_responsable,
+            mto_estado
+        ];
         const { rows } = await db.query(query, values);
         return rows [0];
     },
@@ -54,7 +58,8 @@ const Mantenimiento = {
             mto_fecha, 
             id_hoja_de_vida, 
             id_usuario, 
-            mto_responsable 
+            mto_responsable,
+            mto_estado
         } = datos; 
 
         const query = `
@@ -64,14 +69,28 @@ const Mantenimiento = {
         mto_fecha = $3,
         id_hoja_de_vida = $4,
         id_usuario = $5,
-        mto_responsable = $6
-        WHERE ID_mantenimiento = $7
+        mto_responsable = $6,
+        mto_estado = $7
+        WHERE ID_mantenimiento = $8
         RETURNING *
         `;
 
-        const values = [mto_tipo, mto_descripcion, mto_fecha,id_hoja_de_vida, id_usuario,mto_responsable, id];
+        const values = [mto_tipo, mto_descripcion, mto_fecha,id_hoja_de_vida, id_usuario ,mto_responsable, mto_estado, id];
         const { rows } = await db.query(query, values);
         return rows[0];
+    },
+
+    cancelar_mantenimiento: async(id) => {
+
+        const query = `
+            UPDATE mantenimiento
+            SET mto_estado = 'Cancelado'
+            WHERE id_mantenimiento = $1
+                AND mto_estado IN ('Agendado','Realizado', 'Pendiente')
+            RETURNING *
+        `;
+        const {rows} = await db.query(query, [id]);
+        return rows [0];
     }
 };
 

@@ -3,14 +3,13 @@ const UsuarioModel = require('../models/modelUsuario.js');
 const HistorialSistema = require('../models/modelHistorialsistema.js');
 const Tiposaccion = require('../config/Tiposaccion.js');
 const Credencialesmodel = require('../models/modelCredenciales');
+const obtenerIp = require('../utils/ipHelper');
 
 exports.createUsuario = async (req, res) => {
     try {
 
         //ip del usuario
-        const ip =
-            req.headers['x-forwarded-for']?.split(',')[0] ||
-            req.socket.remoteAddress;
+        const ip = obtenerIp(req);
 
         const { usu_nombre, 
                 usu_apellido, 

@@ -16,14 +16,15 @@ app.use('/instalador_responsable', require('./routes/routesInstaladorresponsabel
 app.use('/proveedor', require('./routes/routesProveedor'));
 app.set('trust proxy', true);
 app.use('/mantenimiento', require('./routes/routeMantenimiento.js')); //✅
-app.use('/Switch', require('./routes/routeSwitch.js'));//✅
-app.use('/Dependencias_impacto', require('./routes/routeDependencias.js'));//✅
-app.use('/CaracteristicasTecnicas', require('./routes/routeCaracteristicasTecnicas.js')); //✅
-app.use('/Equipos', require('./routes/routeEquipo.js'));//✅
-app.use('/Campana', require('./routes/routeCampana.js')); //✅
-app.use('/Ubicacion', require('./routes/routeUbicacion.js'));//✅
-app.use('/Ciudad', require('./routes/routeCiudad.js')); //✅
-app.use('/Departamento', require('./routes/routeDepartamento.js')); //✅
+app.use('/switch', require('./routes/routeSwitch.js'));//✅
+app.use('/dependencias_impacto', require('./routes/routeDependencias.js'));//✅
+app.use('/caracteristicasTecnicas', require('./routes/routeCaracteristicasTecnicas.js')); //✅
+app.use('/equipos', require('./routes/routeEquipo.js'));//✅
+app.use('/campana', require('./routes/routeCampana.js')); //✅
+app.use('/ubicacion', require('./routes/routeUbicacion.js'));//✅
+app.use('/ciudad', require('./routes/routeCiudad.js')); //✅
+app.use('/departamento', require('./routes/routeDepartamento.js')); //✅
+app.use('/hojavida', require('./routes/routesHoja_vida.js'));
 
 // Ruta de prueba
 app.get('/', (req, res) => {

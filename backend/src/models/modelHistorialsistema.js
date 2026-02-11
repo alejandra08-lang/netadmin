@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const db = require('../config/db');
 
 const HistorialSistemaModel = {
 
@@ -24,7 +24,7 @@ const HistorialSistemaModel = {
              RETURNING *;
         `;
 
-        const { rows } = await pool.query(query, [
+        const { rows } = await db.query(query, [
             id_usuario, 
             his_accion,
             id_tipo_accion,
@@ -48,7 +48,7 @@ const HistorialSistemaModel = {
         INNER JOIN usuario u ON h.id_usuario = u.id_usuario 
         ORDER BY h.his_fecha_hora DESC;
     `;
-        const { rows } = await pool.query(query);
+        const { rows } = await db.query(query);
         return rows;
     },
 
@@ -58,7 +58,7 @@ const HistorialSistemaModel = {
         WHERE id_historial_sistema = $1;
     `;
 
-        const { rows } = await pool.query(query, [id]);
+        const { rows } = await db.query(query, [id]);
         return rows[0];
     },
 
@@ -69,16 +69,18 @@ const HistorialSistemaModel = {
         ORDER BY his_fecha_hora DESC;
     `;
 
-        const { rows } = await pool.query(query, [id_usuario]);
+        const { rows } = await db.query(query, [id_usuario]);
         return rows;
     },
 
     async delete(id) {
-        await pool.query(
+        await db.query(
             'DELETE FROM historial_sistema WHERE id_historial_sistema = $1',
             [id]
         );
     }
 };
+
+
 
 module.exports = HistorialSistemaModel;

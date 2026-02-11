@@ -1,3 +1,4 @@
+const CaracteristicasTecnicas = require('../models/modelCaracteristicasTecnicas');
 const caracteristicas = require('../models/modelCaracteristicasTecnicas');
 
 const obtener_caracteristicas = async (req, res) => {
@@ -45,19 +46,39 @@ const crear_caracteristicas = async (req, res) => {
     
 const editar_caracteristicas = async (req, res) => {
     const { id } = req.params; 
-    try {
-        const actualizada = await caracteristicas.editar_caracteristicas(id, req.body);
+    const data = req.body
+    if (isNaN(id)) {
+        return res.status(400).json({
+            message: 'ID inválido'
+        });
+    }
 
-        if (!actualizada) {
-            return res.status(404).json({ message: "Perfil tecnico no encontrado."});
+    if (!data || Object.keys(data).length === 0) {
+        return res.status(400).json({
+            message: 'No se enviaron datos para actualizar'
+        });
+    }
+
+    try {
+        const instalador = await CaracteristicasTecnicas.editar_caracteristicas(id, data);
+
+        if (!instalador) {
+            return res.status(404).json({
+                message: 'Cracteristicas tecnicas no encontradas'
+            });
         }
 
         res.json({
-            message: "Especificaciones actualizadas correctamente",
-            data: actualizada
+            message: 'Cracteristicas tecnicas correctamente',
+            data: instalador
         });
-    }catch (error) {
-        res.status(500).json({ error: error.message});
+
+    } catch (error) {
+        console.error('Error al actualizar Cracteristicas tecnicas:', error);
+        res.status(500).json({
+            message: 'Error interno del servidor',
+            error: error.message
+        });
     }
 };
 

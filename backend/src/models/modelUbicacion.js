@@ -1,5 +1,4 @@
 const db = require('../config/db');
-const { obtener_ubicaciones, eliminar_ubicacion } = require('../controllers/controllerUbicacion');
 
 const Ubicacion = {
     obtener_ubicaciones: async () => {

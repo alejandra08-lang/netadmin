@@ -1,9 +1,12 @@
 const Tiposaccion = require('../config/Tiposaccion');
 const HistorialSistema = require('../models/modelHistorialsistema');
 const Proveedormodel = require('../models/modelProveedor');
+const registrarHistorial = require('../utils/historialHelper');
+const obtenerIp = require('../utils/ipHelper');
 
 //crear proveedores
 exports.createproveedor = async(req, res) => {
+    const ip = obtenerIp(req);
     try {
         const pro_fecha_entrega = new Date();
 
@@ -54,14 +57,13 @@ exports.createproveedor = async(req, res) => {
 };
 
 //enlistar proveedores
-
 exports.getproveedores = async (req, res) => {
     try {
         const {razon_social} = req.query;
 
         if(razon_social){
             const razonDecodificada = decodeURIComponent(razon_social);
-            const proveedor = await Proovedormodel.findRasonsocial(
+            const proveedor = await Proveedormodel.findAll (
                 razonDecodificada
             );
             if (proveedor.length === 0){
@@ -72,14 +74,13 @@ exports.getproveedores = async (req, res) => {
 
             return res.json(proveedor);
         }
-        //Si no viene query listar todos
-        const proveedores = await proveedormodelroovedormodel.findAll();
+        const proveedores = await Proveedormodel.findAll();
         res.json(proveedores);
         
     } catch (error){
         res.status(500).json({
             message: 'Error al tratar de listar a los proveedores',
-            error: message});
+            error: error.message});
     }
 };
 
@@ -107,6 +108,7 @@ exports.updateproveedor = async (req, res) => {
     console.log('ID recibido:', req.params.id, typeof req.params.id);
 
     try {
+        const razonsocial = decodeURIComponent(req.params.pro_razon_social);
         const proveedorActualizado = await Proveedormodel.update(
             req.params.id,
             req.body
@@ -116,13 +118,19 @@ exports.updateproveedor = async (req, res) => {
             return res.status(404).json({ message: 'Proveedor no encontrado' });
         }
 
-        res.json(proveedorActualizado);
+        const ip = obtenerIp(req);
+        await registrarHistorial({
+            id_usuario: req.usuario.id_usuario,
+            id_campana: req.usuario.id_campana,
+            accion: `Proveedor actualizado ${razonsocial}`,
+            his_ip: ip
+        })
+
+        res.json({ message: "proveedor actualizado correctamente", data: proveedorActualizado});
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
-
 //eliminar proveedor
 
 exports.deleteproveedor = async (req, res) => {

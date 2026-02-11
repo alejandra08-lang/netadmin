@@ -22,17 +22,42 @@ const DependenciasImpacto = {
         return rows[0];
     },
 
-    editar_dependencia: async (id,datos) => {
-        const { dpo_dependencias, dpo_impacto, dpo_nivel_impacto, dpo_congenitas} = datos;
+    editar_dependencia: async (id_dependencia_impacto, data) => {
+        const campos = [];
+        const valores = [];
+        let index = 1;
+
+        if(data.dpo_dependencias !== undefined ){
+            campos.push(`dpo_dependencias = $${index++}`);
+            valores.push(data.dpo_dependencias);
+        }
+
+        if (data.dpo_impacto !== undefined) {
+            campos.push(`dpo_impacto = $${index++}`);
+            valores.push(data.dpo_impacto);
+        }
+
+        if (data.dpo_nivel_impacto !== undefined) {
+            campos.push(`dpo_nivel_impacto = $${index++}`);
+            valores.push(data.dpo_nivel_impacto);
+        }
+
+        if(data.dpo_congenitas !== undefined){
+            campos.push(`dpo_congenitas =$${index++}`); 
+            valores.push(data.dpo_congenitas);
+        }
+
+        if (campos.length === 0) return null;
+
         const query = `
-        UPDATE dependencia_impacto
-        SET dpo_dependencias = $1, dpo_impacto = $2, dpo_nivel_impacto = $3, dpo_congenitas = $4
-        WHERE ID_dependencia_impacto = $5
-        RETURNING *
+            UPDATE dependencia_impacto
+            SET ${campos.join(', ')}
+            WHERE id_dependencia_impacto = $${index}
+            RETURNING *;
         `;
 
-        const values = [dpo_dependencias, dpo_impacto, dpo_nivel_impacto, dpo_congenitas, id];
-        const { rows } =await db.query(query, values);
+        valores.push(id_dependencia_impacto);
+        const {rows} = await db.query(query, valores);
         return rows[0];
     },
 
